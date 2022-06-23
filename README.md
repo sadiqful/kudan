@@ -3,7 +3,7 @@ Ouster Library
 
 Ouster library 
 
-Features
+What you can achieve with the Library
 --------
 
  - Querying and setting sensor configuration
