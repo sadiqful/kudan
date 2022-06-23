@@ -3,7 +3,6 @@ Ouster Library
 
 Ouster is a library that allows users interact with sensor hardware and recorded sensor data. This is suitable for prototyping, evaluation and other non-safety critical applications using Python or C++. The C++ library has a wide range of use cases for implementing and intereacting with sensors. 
 
-The Ouster Sensor SDK provides developers interfaces for interacting with sensor hardware and recorded sensor data suitable for prototyping, evaluation, and other non-safety-critical applications in Python and C++. Example and reference code is provided for common operations on sensor data in both languages. The SDK includes APIs for:
 
 What you can achieve with the Library
 --------
