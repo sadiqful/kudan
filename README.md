@@ -15,14 +15,14 @@ Features
  - Frame-based access to lidar data as numpy datatypes
  - A responsive visualizer utility for pcap and sensor
 
-Installation
+Usage syntax
 ------------
 
 Install $project by running:
 
     install project
 
-Contribute
+Sample
 ----------
 
 - Issue Tracker: github.com/$project/$project/issues
