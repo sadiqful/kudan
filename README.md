@@ -1,20 +1,19 @@
-$project
+Ouster Library
 ========
 
-$project will solve your problem of where to start with documentation,
-by providing a basic explanation of how to do it easily.
-
-Look how easy it is to use:
-
-    import project
-    # Get your stuff done
-    project.do_stuff()
+Ouster library 
 
 Features
 --------
 
-- Be awesome
-- Make things faster
+ - Querying and setting sensor configuration
+ - Recording and reading data in pcap format
+ - Reading and buffering sensor UDP data streams reliably
+ - Conversion of raw data to range/signal/near_ir/reflectivity images (destaggering)
+ - Efficient projection of range measurements to Cartesian (x, y, z) corrdinates
+ - Visualization of multi-beam flash lidar data
+ - Frame-based access to lidar data as numpy datatypes
+ - A responsive visualizer utility for pcap and sensor
 
 Installation
 ------------
