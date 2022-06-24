@@ -27,17 +27,12 @@ Sensor Configuration using C++
 
 The first step is to get the sensor starting. By getting the sensor started, it works with the current config on the hostname. 
 
-` const std::string sensor_hostname = argv[1];
-
-    // 1. Get the current config on the sensor
+`const std::string sensor_hostname = argv[1];
     std::cerr << "1. Get original config of sensor... ";
-
-    //! [doc-stag-cpp-get-config]
     sensor::sensor_config original_config;
     if (!sensor::get_config(sensor_hostname, original_config)) {
         std::cerr << "..error: could not connect to sensor!" << std::endl;
         return EXIT_FAILURE;
     }
-    //! [doc-etag-cpp-get-config]
     std::cerr << "success! Got original config\nOriginal config of sensor:\n"
-              << to_string(original_config) << std::endl;`
+              << to_string(original_config) << std::endl; `
