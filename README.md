@@ -25,6 +25,8 @@ Ouster library supports two languages, Python and C++. The complete sample for a
 Sensor Configuration using C++
 ------------------------------
 
+The first step is to get the sensor starting. By getting the sensor started, it works with the current config on the hostname. 
+
 ```cpp
 const std::string sensor_hostname = argv[1];
 
@@ -41,6 +43,4 @@ const std::string sensor_hostname = argv[1];
     std::cerr << "success! Got original config\nOriginal config of sensor:\n"
               << to_string(original_config) << std::endl;
 ```
-
-The first step is to get the sensor starting. By getting the sensor started, it works with the current config on the hostname. 
 
