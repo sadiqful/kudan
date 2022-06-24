@@ -44,3 +44,28 @@ const std::string sensor_hostname = argv[1];
               << to_string(original_config) << std::endl;
 ```
 
+The next step is to empty the current sensor configuration and set a few configuration parameters. This allows you to modify the current config
+
+```cpp
+std::cerr << "\n2. Make new config and set sensor to it... ";
+    //! [doc-stag-cpp-make-config]
+    sensor::sensor_config config;
+    config.azimuth_window = std::make_pair<int>(90000, 270000);
+    config.ld_mode = sensor::lidar_mode::MODE_512x10;
+
+    // If relevant, use config_flag to set udp dest automatically
+    uint8_t config_flags = 0;
+    const bool udp_dest_auto = true;  // whether or not to use auto destination
+    const bool persist =
+        false;  // whether or not we will persist the settings on the sensor
+
+    if (udp_dest_auto) config_flags |= ouster::sensor::CONFIG_UDP_DEST_AUTO;
+    if (persist) config_flags |= ouster::sensor::CONFIG_PERSIST;
+    //! [doc-etag-cpp-make-config]
+
+    if (!sensor::set_config(sensor_hostname, config, config_flags)) {
+        std::cerr << "..error: could not connect to sensor" << std::endl;
+        return EXIT_FAILURE;
+    }
+    std::cerr << "..success! Updated sensor to new config" << std::endl;
+```
