@@ -7,7 +7,7 @@ Ouster is a library that allows users interact with sensor hardware and recorded
 What you can achieve with the Library
 --------
 
- - Querying and setting sensor configuration
+ - Sensor configuration
  - Recording and reading data in pcap format
  - Reading and buffering sensor UDP data streams reliably
  - Conversion of raw data to range/signal/near_ir/reflectivity images (destaggering)
@@ -16,12 +16,15 @@ What you can achieve with the Library
  - Frame-based access to lidar data as numpy datatypes
  - A responsive visualizer utility for pcap and sensor
 
-Usage syntax
+Usage syntax and Sample
 ------------
 
+Ouster library supports two languages, Python and C++. 
 
 
-    install project
+Sensor Configuration using C++
+------------------------------
+
 
 Sample
 ----------
