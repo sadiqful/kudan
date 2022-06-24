@@ -19,11 +19,12 @@ What you can achieve with the Library
 Usage syntax and Sample
 ------------
 
-Ouster library supports two languages, Python and C++. 
+Ouster library supports two languages, Python and C++. The complete sample for all the implementation will be provided, the usage snytax and sample aims to explain some of the critical aspects of the example to facilitate easy use. 
 
 
 Sensor Configuration using C++
 ------------------------------
+
 
 
 Sample
