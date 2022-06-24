@@ -25,21 +25,19 @@ Ouster library supports two languages, Python and C++. The complete sample for a
 Sensor Configuration using C++
 ------------------------------
 
+The first step is to get the sensor starting. By getting the sensor started, it works with the current config on the hostname. 
 
+` const std::string sensor_hostname = argv[1];
 
-Sample
-----------
+    // 1. Get the current config on the sensor
+    std::cerr << "1. Get original config of sensor... ";
 
-- Issue Tracker: github.com/$project/$project/issues
-- Source Code: github.com/$project/$project
-
-Support
--------
-
-If you are having issues, please let us know.
-We have a mailing list located at: project@google-groups.com
-
-License
--------
-
-The project is licensed under the BSD license.
+    //! [doc-stag-cpp-get-config]
+    sensor::sensor_config original_config;
+    if (!sensor::get_config(sensor_hostname, original_config)) {
+        std::cerr << "..error: could not connect to sensor!" << std::endl;
+        return EXIT_FAILURE;
+    }
+    //! [doc-etag-cpp-get-config]
+    std::cerr << "success! Got original config\nOriginal config of sensor:\n"
+              << to_string(original_config) << std::endl;`
