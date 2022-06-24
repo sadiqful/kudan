@@ -111,6 +111,73 @@ These two steps suffices but you can confirm the config from the sensor after it
 
     std::cerr << "Updated config: \n" << to_string(new_config) << std::endl;
  ```
+ 
+ ### Lidar Scan
+ 
+ You can also create a LidarScan by providing a lidar profile, avilable through the sensor_info. The complete example is demostrated in the linder_scan_example file.
+ 
+ ```cpp
+ auto profile_scan = ouster::LidarScan(w, h, info.format.udp_profile_lidar);
+    //! [doc-etag-lidarscan-profile-constructor]
+
+    // You might have a dual returns sensor, in which case your profile will
+    // reflect that it is a dual return profile:
+    //! [doc-stag-lidarscan-dual-profile-constructor]
+    auto dual_returns_scan = ouster::LidarScan(
+        w, h, UDPProfileLidar::PROFILE_RNG19_RFL8_SIG16_NIR16_DUAL);
+    //! [doc-etag-lidarscan-dual-profile-constructor]
+
+    //! [doc-stag-lidarscan-reduced-slots]
+    // Finally, you can construct by specifying fields directly
+    static const std::array<std::pair<ChanField, ChanFieldType>, 2>
+        reduced_slots{{{ChanField::RANGE, ChanFieldType::UINT32},
+                       {ChanField::REFLECTIVITY, ChanFieldType::UINT8}}};
+    auto reduced_fields_scan =
+        ouster::LidarScan(w, h, reduced_slots.begin(), reduced_slots.end());
+ ```
+ 
+ ### 2D Representations and 3D representations
+ 
+ Working with 2D representations and 3D representations allows users to reshape the X,Y,Z coordinates into a 2D and also adjust XYZLut with external matrix. 
+ 
+ ```cpp
+ img_t<double> get_x_in_image_form(const LidarScan& scan, bool destaggered,
+                                  const sensor::sensor_info& info) {
+    // For convenience, save w and h to variables
+    const size_t w = info.format.columns_per_frame;
+    const size_t h = info.format.pixels_per_column;
+
+    // Get the XYZ in ouster::Points (n x 3 Eigen array) form
+    XYZLut lut = make_xyz_lut(info);
+    auto cloud = cartesian(scan.field(sensor::ChanField::RANGE), lut);
+
+    // Access x and reshape as needed
+    // Note that the values in cloud.col(0) are ordered
+    auto x = Eigen::Map<const img_t<double>>(cloud.col(0).data(), h, w);
+    auto x_destaggered = destagger<double>(x, info.format.pixel_shift_by_row);
+
+    // Apply destagger if desired
+    if (!destaggered) return x;
+    return x_destaggered;
+}
+ ```
+ 
+Adjust XYZLut with external matrix
+
+```cpp
+ auto lut_extrinsics = make_xyz_lut(
+        w, h, sensor::range_unit, info.lidar_origin_to_beam_origin_mm,
+        transformation, info.beam_azimuth_angles, info.beam_altitude_angles);
+
+    std::cerr << "Calculating 3d Points of with special transform provided.."
+              << std::endl;
+    auto cloud_adjusted = cartesian(range, lut_extrinsics);
+    //! [doc-etag-extrinsics-to-xyzlut]
+
+    std::cerr << "And now the 2000th point in the transformed point cloud... ("
+              << cloud_adjusted(2000, 0) << ", " << cloud_adjusted(2000, 1)
+              << ", " << cloud_adjusted(2000, 2) << ")" << std::endl;
+```
 
 Sensor Configuration using Python
 ---------------------------------
