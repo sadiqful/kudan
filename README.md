@@ -35,4 +35,4 @@ The first step is to get the sensor starting. By getting the sensor started, it 
         return EXIT_FAILURE;
     }
     std::cerr << "success! Got original config\nOriginal config of sensor:\n"
-              << to_string(original_config) << std::endl; `
+              << to_string(original_config) << std::endl;`
