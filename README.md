@@ -69,3 +69,16 @@ std::cerr << "\n2. Make new config and set sensor to it... ";
     }
     std::cerr << "..success! Updated sensor to new config" << std::endl;
 ```
+
+These two steps suffices but you can confirm the config from the sensor after it has been updated. This is just to make sure you have the correct config
+
+```cpp
+ std::cerr << "\n3. Get back updated sensor config... ";
+    sensor::sensor_config new_config;
+    if (!sensor::get_config(sensor_hostname, new_config)) {
+        std::cerr << "..error: could not connect to sensor" << std::endl;
+        return EXIT_FAILURE;
+    } else {
+        std::cerr << "..success! Got updated config" << std::endl;
+    }
+    ```
