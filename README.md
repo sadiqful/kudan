@@ -16,8 +16,27 @@ What you can achieve with the Library
  - Frame-based access to lidar data as numpy datatypes
  - A responsive visualizer utility for pcap and sensor
 
+
+Ouster Python Library Supported Platforms 
+----------------------------------------
+
+Ouster Python Library Supported Platforms
+
+Pre-built binaries are provided on PyPI for the following platforms:
+
+    Most glibc-based Linux distributions on x86_64 and ARM64 platforms (manylinux2010_x86_64, manylinux2014_aarch64)
+    macOS >= 10.13 on x86_64 platforms (macosx_10_13_x86_64)
+    macOS >= 11.0 on Apple M1 for Python >= 3.8 (macosx_11_0_arm64)
+    Windows 10 on x86_64 platforms (win_amd64)
+
+Building from source is supported on:
+
+    Ubuntu 18.04, 20.04, and Debian 10 (x86-64, aarch64)
+    macOS >= 10.13 (x86-64), >= 11.0 (arm64)
+    Windows 10 (x86-64)
+
 Usage syntax and Sample
-------------
+----------------------
 
 Ouster library supports two languages, Python and C++. The complete sample for all the implementation will be provided, the usage snytax and sample aims to explain some of the critical aspects of the example to facilitate easy use. 
 
@@ -92,3 +111,27 @@ These two steps suffices but you can confirm the config from the sensor after it
 
     std::cerr << "Updated config: \n" << to_string(new_config) << std::endl;
  ```
+
+Sensor Configuration using Python
+---------------------------------
+
+Configuring sensor requires the user to configure two different ports. These ports are the operating mode and lidar mode respectively. The argument to be passed for this function is the hostname. 
+
+```python
+# create empty config
+    config = client.SensorConfig()
+
+    # set the values that you need: see sensor documentation for param meanings
+    config.operating_mode = client.OperatingMode.OPERATING_NORMAL
+    config.lidar_mode = client.LidarMode.MODE_1024x10
+    config.udp_port_lidar = 7502
+    config.udp_port_imu = 7503
+
+    # set the config on sensor, using appropriate flags
+    client.set_config(hostname, config, persist=True, udp_dest_auto=True)
+    # [doc-etag-configure]
+
+    # if you like, you can view the entire set of parameters
+    config = client.get_config(hostname)
+    print(f"sensor config of {hostname}:\n{config}")
+```
