@@ -115,7 +115,7 @@ These two steps suffices but you can confirm the config from the sensor after it
 Sensor Configuration using Python
 ---------------------------------
 
-Configuring sensor requires the user to configure two different ports. These ports are the operating mode and lidar mode respectively. The argument to be passed for this function is the hostname. 
+Configuring sensor requires the user to configure two different ports. These ports are the operating mode and lidar mode respectively. The argument to be passed for this function is the hostname which is the hostname of the sensor.
 
 ```python
 # create empty config
@@ -135,3 +135,91 @@ Configuring sensor requires the user to configure two different ports. These por
     config = client.get_config(hostname)
     print(f"sensor config of {hostname}:\n{config}")
 ```
+
+### Fetch metadata from a sensor 
+
+Accurately reconstructing point clouds from a sensor data stream requires access to sensor calibration and per-run configuration like the operating mode and azimuth window. The client API makes it easy to read metadata and write it to disk for use with recorded data streams. he argument to be passed for this function is the hostname which is the hostname of the sensor.
+
+```python
+with closing(client.Sensor(hostname)) as source:
+        # print some useful info from
+        print("Retrieved metadata:")
+        print(f"  serial no:        {source.metadata.sn}")
+        print(f"  firmware version: {source.metadata.fw_rev}")
+        print(f"  product line:     {source.metadata.prod_line}")
+        print(f"  lidar mode:       {source.metadata.mode}")
+        print(f"Writing to: {hostname}.json")
+
+        # write metadata to disk
+        source.write_metadata(f"{hostname}.json")
+```
+
+### Record data from live sensor to pcap file
+
+Note that pcap files recorded this way only preserve the UDP data stream and not networking information, unlike capturing packets directly from a network
+interface with tools like tcpdump or wireshark.
+
+The Arguments 
+
+hostname: hostname of the sensor
+lidar_port: UDP port to listen on for lidar data
+imu_port: UDP port to listen on for imu data
+n_seconds: max seconds of time to record. (Ctrl-Z correctly closes streams)
+
+```python
+import ouster.pcap as pcap
+    from datetime import datetime
+
+    # [doc-stag-pcap-record]
+    from more_itertools import time_limited
+    # connect to sensor and record lidar/imu packets
+    with closing(client.Sensor(hostname, lidar_port, imu_port,
+                               buf_size=640)) as source:
+
+        # make a descriptive filename for metadata/pcap files
+        time_part = datetime.now().strftime("%Y%m%d_%H%M%S")
+        meta = source.metadata
+        fname_base = f"{meta.prod_line}_{meta.sn}_{meta.mode}_{time_part}"
+
+        print(f"Saving sensor metadata to: {fname_base}.json")
+        source.write_metadata(f"{fname_base}.json")
+
+        print(f"Writing to: {fname_base}.pcap (Ctrl-C to stop early)")
+        source_it = time_limited(n_seconds, source)
+        n_packets = pcap.record(source_it, f"{fname_base}.pcap")
+
+        print(f"Captured {n_packets} packets")
+```
+### Display range from a single scan as 3D points
+
+This function allows users to display range from a single scan as 3D objets. The arguments are hostname of the sensor and UDP port to listen on for lidar data. 
+
+```python
+import matplotlib.pyplot as plt  # type: ignore
+
+    # get single scan
+    metadata, sample = client.Scans.sample(hostname, 1, lidar_port)
+    scan = next(sample)[0]
+
+    # set up figure
+    plt.figure()
+    ax = plt.axes(projection='3d')
+    r = 3
+    ax.set_xlim3d([-r, r])
+    ax.set_ylim3d([-r, r])
+    ax.set_zlim3d([-r, r])
+
+    plt.title("3D Points from {}".format(hostname))
+
+    # [doc-stag-plot-xyz-points]
+    # transform data to 3d points
+    xyzlut = client.XYZLut(metadata)
+    xyz = xyzlut(scan.field(client.ChanField.RANGE))
+    # [doc-etag-plot-xyz-points]
+
+    # graph xyz
+    [x, y, z] = [c.flatten() for c in np.dsplit(xyz, 3)]
+    ax.scatter(x, y, z, c=z / max(z), s=0.2)
+    plt.show()
+```
+
