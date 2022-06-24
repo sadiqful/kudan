@@ -82,3 +82,5 @@ These two steps suffices but you can confirm the config from the sensor after it
         std::cerr << "..success! Got updated config" << std::endl;
     }
     ```
+   
+These two steps suffices but you can confirm the config from the sensor after it has been updated. This is just to make sure you have the correct config
