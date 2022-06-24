@@ -81,6 +81,14 @@ These two steps suffices but you can confirm the config from the sensor after it
     } else {
         std::cerr << "..success! Got updated config" << std::endl;
     }
-    ```
-   
-These two steps suffices but you can confirm the config from the sensor after it has been updated. This is just to make sure you have the correct config
+ ```
+ 
+ You can also confirm that only what you wanted to change changed
+ 
+ ```cpp
+ assert(original_config != new_config);
+    assert(new_config.azimuth_window == config.azimuth_window);
+    assert(new_config.ld_mode == config.ld_mode);
+
+    std::cerr << "Updated config: \n" << to_string(new_config) << std::endl;
+ ```
