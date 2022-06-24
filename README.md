@@ -27,7 +27,7 @@ Sensor Configuration using C++
 
 The first step is to get the sensor starting. By getting the sensor started, it works with the current config on the hostname. 
 
-    ```c++
+    ```cpp
     std::cerr << "1. Get original config of sensor... ";
     sensor::sensor_config original_config;
     if (!sensor::get_config(sensor_hostname, original_config)) {
@@ -36,5 +36,4 @@ The first step is to get the sensor starting. By getting the sensor started, it 
     }
     std::cerr << "success! Got original config\nOriginal config of sensor:\n"
               << to_string(original_config) << std::endl;
-              
               ```
